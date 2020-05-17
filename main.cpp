@@ -39,7 +39,7 @@ public:
   unsigned int getPrice() const { return price; }
   void setPrice(unsigned int price) { DanceStudio::price = price; }
 
-  void say_price() { //Расширения поведения
+  virtual void say_price() const{ //Расширения поведения
     cout << "Цена занятий в нашей студии равна " << getPrice() << endl;
   };
 };
@@ -63,9 +63,13 @@ public:
   virtual void add_students(unsigned int quantity_student) {
     quantity_student++;
   }
+
+  void say_price() const {
+    cout << "Цена занятий в детской группе равна " << getPrice()/2 << endl;
+  };
 };
 
-class TeacherCG : public ChildGroup { //Инкапсуляция за счёт абстракций
+class TeacherCG : public ChildGroup {
 protected:
   unsigned int salary;
 
@@ -85,13 +89,25 @@ public:
     return 30000;
   }
   void setSalary(unsigned int salary) { TeacherCG::salary = salary; }
+
+  void say_price() const {
+    cout << "Цена занятий в моей группе равна " << getPrice()/2 << endl;
+  };
 };
+
+
+void say(DanceStudio *d){//Инкапсуляция за счёт абстракций
+  d->say_price();
+}
 
 int main() {
   TeacherCG teacher(5, 300, "DanceStudio", 3, 30);
   cout << teacher.getSalary() << endl;
   DanceStudio studio(15, 300, "DanceStudio");
   studio.say_price();
+
+  say(&teacher);
+  say(&studio);
 
   std::cout << "Hello, World!" << std::endl;
   return 0;
